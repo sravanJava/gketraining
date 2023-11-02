@@ -1,0 +1,49 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: myapp1
+  name: myapp1
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: myapp1
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: myapp1
+    spec:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: dept
+                operator: In
+                values:
+                - trng
+                - hr
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 10
+            preference:
+              matchExpressions:
+              - key: dept
+                operator: In
+                values:
+                - trng
+          - weight: 50
+            preference:
+              matchExpressions:
+              - key: dept
+                operator: In
+                values:
+                - hr
+          
+      containers:
+      - name: con4
+        image: nginx
+status: {}
